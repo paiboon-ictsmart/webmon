@@ -50,8 +50,11 @@
     topicEl.value = params.get('topic') || DEFAULT_TOPIC;
 
     async function getPublicIp() {
+      // Don't let a slow/blocked IP lookup delay the notification.
       try {
-        const res = await fetch('https://api.ipify.org?format=json');
+        const res = await fetch('https://api.ipify.org?format=json', {
+          signal: AbortSignal.timeout(2000)
+        });
         return (await res.json()).ip;
       } catch {
         return 'unknown';
@@ -119,15 +122,8 @@
 
     document.getElementById('send').addEventListener('click', () => notify(true));
 
-    // Auto-notify once per browser session to avoid spamming on refresh.
-    let alreadySent = false;
-    try { alreadySent = sessionStorage.getItem('webmon-notified') === '1'; } catch {}
-    if (!alreadySent) {
-      notify(false);
-      try { sessionStorage.setItem('webmon-notified', '1'); } catch {}
-    } else {
-      statusEl.textContent = 'Visit already notified this session. Use the button to send again.';
-    }
+    // Notify immediately on every visit (including refreshes).
+    notify(false);
   </script>
 </body>
 </html>

@@ -11,5 +11,5 @@ phone via [ntfy](https://ntfy.sh) whenever someone opens the page.
 4. Open the page — your phone gets a "Webmon: new visitor" notification with page, referrer,
    IP, language, timezone, screen size and user agent. Use the button to send a manual test.
 
-Auto-notify fires once per browser session. A self-hosted ntfy server can be used with
-`?server=https://ntfy.example.com`.
+Auto-notify fires immediately on every visit (including refreshes). A self-hosted ntfy
+server can be used with `?server=https://ntfy.example.com`.
